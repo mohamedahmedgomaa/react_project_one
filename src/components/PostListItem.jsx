@@ -1,7 +1,7 @@
-import React from "react";
 import {Button, ButtonGroup, Table} from "react-bootstrap";
+import React from "react";
 
-const PostList = ({data, loading, error}) => {
+const PostListItem = ({data, loading, error}) => {
     const records = data.map((el, idx) => (
         <tr key={el.id}>
             <td>#{++idx}</td>
@@ -15,27 +15,20 @@ const PostList = ({data, loading, error}) => {
         </tr>
     ));
     return (
-        <Table striped bordered hover>
-            <thead>
-            <tr>
-                <th>#</th>
-                <th style={{width: "70%"}}>Title</th>
-                <th style={{width: "10%"}}></th>
-            </tr>
-            </thead>
-            <tbody>{loading ?
-                (
+        <>
+            {
+                loading ? (
                     <tr>
                         <td colSpan={3}>Loading please wait....</td>
                     </tr>
-                ) : error ?
-                (
+                ) : error ? (
                     <tr>
                         <td colSpan={3}>{error}</td>
                     </tr>
-                ) : records}</tbody>
-        </Table>
+                ) : records
+            }
+        </>
     );
 };
 
-export default PostList;
+export default PostListItem;

@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 import {useDispatch, useSelector} from 'react-redux'
 import {Button, ButtonGroup, Table} from "react-bootstrap";
-import PostList from "./PostList";
+import PostList from "../components/PostList";
 import {fetchPosts} from "../state/postSlice"
 const Index = () => {
     const dispatch = useDispatch();
