@@ -1,29 +1,17 @@
-import React from "react";
+import {useEffect} from "react";
+import {useDispatch, useSelector} from 'react-redux'
 import {Button, ButtonGroup, Table} from "react-bootstrap";
-
+import PostList from "./PostList";
+import {fetchPosts} from "../state/postSlice"
 const Index = () => {
+    const dispatch = useDispatch();
+    const {records, loading, error} = useSelector((state) => state.posts);
+
+    useEffect(() => {
+        dispatch(fetchPosts())
+    }, [dispatch]);
     return (
-        <Table striped bordered hover>
-            <thead>
-            <tr>
-                <th>#</th>
-                <th style={{ width: "70%" }}>Title</th>
-                <th style={{ width: "10%" }}></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>#1</td>
-                <td>this is title 1</td>
-                <td>
-                    <ButtonGroup aria-label="Basic example">
-                        <Button variant="success">Edit</Button>
-                        <Button variant="danger">Delete</Button>
-                    </ButtonGroup>
-                </td>
-            </tr>
-            </tbody>
-        </Table>
+        <PostList data={records} loading={loading} error={error}/>
     );
 };
 
