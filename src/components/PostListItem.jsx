@@ -1,7 +1,12 @@
 import {Button, ButtonGroup, Table} from "react-bootstrap";
 import React from "react";
 
-const PostListItem = ({data, loading, error}) => {
+const PostListItem = ({data, deleteRecord}) => {
+    const deleteHandler = (item) => {
+        if (window.confirm("Do ypu really want to delete record " + item.title + " ? ")) {
+            deleteRecord(item.id);
+        }
+    }
     const records = data.map((el, idx) => (
         <tr key={el.id}>
             <td>#{++idx}</td>
@@ -9,24 +14,14 @@ const PostListItem = ({data, loading, error}) => {
             <td>
                 <ButtonGroup aria-label="Basic example">
                     <Button variant="success">Edit</Button>
-                    <Button variant="danger">Delete</Button>
+                    <Button variant="danger" onClick={() => deleteHandler(el)}>Delete</Button>
                 </ButtonGroup>
             </td>
         </tr>
     ));
     return (
         <>
-            {
-                loading ? (
-                    <tr>
-                        <td colSpan={3}>Loading please wait....</td>
-                    </tr>
-                ) : error ? (
-                    <tr>
-                        <td colSpan={3}>{error}</td>
-                    </tr>
-                ) : records
-            }
+            {records}
         </>
     );
 };
