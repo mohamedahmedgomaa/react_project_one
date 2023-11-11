@@ -1,18 +1,39 @@
 import React from "react";
-import {NavLink} from "react-router-dom";
 
-const Loading = ({loading, children, error}) => {
-    return (
-        <>
-            {
-                loading ? (
-                    <p>Loading please wait....</p>
-                ) : error ? (
-                    <p>{error}</p>
-                ) : children
-            }
-        </>
-    );
+const Loading = ({loading, error, children}) => {
+    const cloneButton = React.cloneElement(children, {disabled: true}, "Loading...")
+    const elementType = children?.type?.render?.displayName ?? 'no';
+
+    const renderHandler = () => {
+        if (elementType === "Button") {
+            return (
+                <>
+                    {
+                        loading ? (
+                            cloneButton
+                        ) : error ? (
+                            <>
+                                {children}
+                                <p>{error}</p>
+                            </>
+                        ) : children
+                    }
+                </>
+            );
+        }
+        return (
+            <>
+                {
+                    loading ? (
+                        <p>Loading please wait....</p>
+                    ) : error ? (
+                        <p>{error}</p>
+                    ) : children
+                }
+            </>
+        )
+    }
+    return renderHandler();
 };
 
 export default Loading;

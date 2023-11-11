@@ -8,11 +8,11 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import RootLayout from "./pages/RootLayout";
-import Add from "./pages/Add";
 import Edit from "./pages/Edit";
 import Details from "./pages/Details";
 import Index from "./pages/Index";
 import ErrorPage from "./pages/ErrorPage";
+import AddPost from "./pages/AddPost";
 
 const router = createBrowserRouter([
     {
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "post/add",
-                element: <Add/>
+                element: <AddPost/>
             },
             {
                 path: "post/:id",
