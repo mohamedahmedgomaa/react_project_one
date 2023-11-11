@@ -2,7 +2,7 @@ import React from "react";
 
 const Loading = ({loading, error, children}) => {
     const cloneButton = React.cloneElement(children, {disabled: true}, "Loading...")
-    const elementType = children?.type?.render?.displayName ?? 'no';
+    const elementType = children?.type?.render?.displayName;
 
     const renderHandler = () => {
         if (elementType === "Button") {
