@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {Form, Button} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {insertPost} from "../state/postSlice";
@@ -8,17 +8,7 @@ import withGuard from "../util/withGuard";
 
 import {useFormik} from "formik";
 import * as Yup from 'yup';
-
-
-
-const formSchema = Yup.object().shape({
-    title: Yup.string()
-        .min(2, 'please insert at least 2 characters!')
-        .max(50, 'please insert at maximum 50 characters!')
-        .required('Title is Required'),
-    description: Yup.string().required('Required'),
-});
-
+import {postSchema} from "../util/validationSchema";
 
 const AddPost = () => {
     const dispatch = useDispatch();
@@ -31,7 +21,7 @@ const AddPost = () => {
             title: '',
             description: '',
         },
-        validationSchema: formSchema,
+        validationSchema: postSchema,
         onSubmit: values => {
             dispatch(insertPost({title: values.title, description: values.description}))
                 .unwrap()
