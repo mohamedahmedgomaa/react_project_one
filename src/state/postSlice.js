@@ -41,11 +41,29 @@ export const deletePost = createAsyncThunk("posts/deletePost", async (id, thunkA
 export const insertPost = createAsyncThunk("posts/insertPost", async (item, thunkAPI) => {
     const {rejectWithValue, getState} = thunkAPI;
     const {auth} = getState();
-    console.log(auth);
     item.user_id = auth.id;
     try {
         const ref = await fetch("http://127.0.0.1:8888/api/post/" , {
             method: "POST",
+            body: JSON.stringify(item),
+            headers: {
+                "Content-type" : "application/json; charset=UTF-8"
+            }
+        });
+        const data = await ref.json();
+        return data.data;
+    }catch (error) {
+        return rejectWithValue(error.message)
+    }
+});
+
+export const editPost = createAsyncThunk("posts/editPost", async (item, thunkAPI) => {
+    const {rejectWithValue, getState} = thunkAPI;
+    const {auth} = getState();
+    item.user_id = auth.id;
+    try {
+        const ref = await fetch(`http://127.0.0.1:8888/api/post/${item.id}` , {
+            method: "PATCH",
             body: JSON.stringify(item),
             headers: {
                 "Content-type" : "application/json; charset=UTF-8"
@@ -76,7 +94,8 @@ const postSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
- // get post
+
+        // get post
         [fetchPost.pending]: (state) => {
             state.loading = true;
             state.error = null;
@@ -99,7 +118,6 @@ const postSlice = createSlice({
         [insertPost.fulfilled]: (state, action) => {
             state.loading = false;
             state.records.push(action.payload);
-            // state.records = action.payload;
         },
         [insertPost.rejected]: (state, action) => {
             state.loading = false;
@@ -107,6 +125,18 @@ const postSlice = createSlice({
         },
 
         // edit post
+        [insertPost.pending]: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        [insertPost.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.record = action.payload
+        },
+        [insertPost.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
 
         // delete post
         [deletePost.pending]: (state) => {
