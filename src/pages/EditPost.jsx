@@ -6,6 +6,7 @@ import Loading from "../components/Loading";
 import {Form, Button} from "react-bootstrap";
 import {editPost} from "../state/postSlice";
 import {useNavigate} from "react-router-dom";
+import withGuard from "../util/withGuard";
 
 const EditPost = () => {
     const dispatch = useDispatch()
@@ -56,4 +57,4 @@ const EditPost = () => {
     );
 };
 
-export default EditPost;
+export default withGuard(EditPost);

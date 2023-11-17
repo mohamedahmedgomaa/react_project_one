@@ -2,7 +2,7 @@ import {Button, ButtonGroup, Table} from "react-bootstrap";
 import React from "react";
 import {Link, useNavigate} from "react-router-dom";
 
-const PostListItem = ({data, deleteRecord}) => {
+const PostListItem = ({data, deleteRecord,isLoggedIn}) => {
     const navigate = useNavigate();
 
     const deleteHandler = (item) => {
@@ -17,7 +17,7 @@ const PostListItem = ({data, deleteRecord}) => {
             <td>
                 <ButtonGroup aria-label="Basic example">
                     <Button variant="success" onClick={() => navigate(`post/${el.id}/edit`)}>Edit</Button>
-                    <Button variant="danger" onClick={() => deleteHandler(el)}>Delete</Button>
+                    <Button variant="danger" onClick={() => deleteHandler(el)} disabled={!isLoggedIn}>Delete</Button>
                 </ButtonGroup>
             </td>
         </tr>

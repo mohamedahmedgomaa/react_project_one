@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {insertPost} from "../state/postSlice";
 import {useNavigate} from "react-router-dom";
 import Loading from "../components/Loading";
-
+import withGuard from "../util/withGuard";
 
 const AddPost = () => {
     const dispatch = useDispatch();
@@ -44,4 +44,4 @@ const AddPost = () => {
     );
 };
 
-export default AddPost;
+export default withGuard(AddPost);
