@@ -6,36 +6,73 @@ import {useNavigate} from "react-router-dom";
 import Loading from "../components/Loading";
 import withGuard from "../util/withGuard";
 
+import {useFormik} from "formik";
+import * as Yup from 'yup';
+
+
+
+const formSchema = Yup.object().shape({
+    title: Yup.string()
+        .min(2, 'please insert at least 2 characters!')
+        .max(50, 'please insert at maximum 50 characters!')
+        .required('Title is Required'),
+    description: Yup.string().required('Required'),
+});
+
+
 const AddPost = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-
     const {loading, error} = useSelector((state) => state.posts)
-    const formHandler = (e) => {
-        e.preventDefault();
-        // const id = Math.floor((Math.random() * 500))
-        dispatch(insertPost({title, description}))
-            .unwrap()
-            .then(() => {
-                navigate("/");
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
+
+    const formik = useFormik({
+        initialValues: {
+            title: '',
+            description: '',
+        },
+        validationSchema: formSchema,
+        onSubmit: values => {
+            dispatch(insertPost({title: values.title, description: values.description}))
+                .unwrap()
+                .then(() => {
+                    navigate("/");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+    });
     return (
-        <Form onSubmit={formHandler}>
+        <Form onSubmit={formik.handleSubmit}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>Title</Form.Label>
-                <Form.Control type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                <Form.Control
+                    type="text"
+                    name="title"
+                    onChange={formik.handleChange}
+                    value={formik.values.title}
+                    isValid={formik.touched.title && !formik.errors.title}
+                    isInvalid={!!formik.errors.title}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {formik.errors.title}
+                </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                 <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" value={description} onChange={(e) => setDescription(e.target.value)}
-                              rows={3}/>
+                <Form.Control
+                    as="textarea"
+                    name="description"
+                    onChange={formik.handleChange}
+                    value={formik.values.description}
+                    isValid={formik.touched.description && !formik.errors.description}
+                    isInvalid={!!formik.errors.description}
+                    rows={3}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {formik.errors.description}
+                </Form.Control.Feedback>
             </Form.Group>
             <Loading loading={loading} error={error}>
                 <Button variant="primary" type="submit">Submit</Button>
